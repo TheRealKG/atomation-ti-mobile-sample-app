@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import net.atomation.atomationsdk.api.IConnectionStateListener;
 import net.atomation.atomationsdk.api.IHumidityTemperatureListener;
+import net.atomation.atomationsdk.api.IIRTemperatureListener;
 import net.atomation.atomationsdk.api.ISensorTag2Atom;
 import net.atomation.atomationsdk.ble.SensorTagAtomManager;
 
@@ -27,6 +28,33 @@ public class DeviceTestsActivity extends AppCompatActivity {
     private Button btnConnect;
     private boolean isConnected;
     private TextView tvIsConnected;
+
+    private Button btnReadIRTemp;
+    private TextView tvIRTempReadTemp;
+    private TextView tvIRTempReadAmbient;
+    private Button btnIRNotifications;
+    private boolean isListeningIRNotifications;
+    private TextView tvIRNotificationsTemp;
+    private TextView tvIRNotificationsAmbient;
+    private Button btnIRStopNotifications;
+
+    private IIRTemperatureListener irTemperatureListener = new IIRTemperatureListener() {
+
+        @Override
+        public void onIRTemperatureRead(final float temperature, final float ambient) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    onIRNotificationsValuesChanged(temperature, ambient);
+                }
+            });
+        }
+
+        @Override
+        public void onIRTemperatureReadError(int error) {
+
+        }
+    };
 
     private Button btnReadHumidTemp;
     private TextView tvHumidReadTemp;
@@ -95,6 +123,8 @@ public class DeviceTestsActivity extends AppCompatActivity {
         tvIsConnected = (TextView) findViewById(R.id.tv_tests_is_connected);
 
         setupEventSending();
+
+        setupIRTemperatureSensor();
 
         setupHumidityTemperatureSensor();
 
@@ -170,6 +200,58 @@ public class DeviceTestsActivity extends AppCompatActivity {
         });
     }
 
+    private void setupIRTemperatureSensor() {
+        btnReadIRTemp = (Button) findViewById(R.id.btn_read_ir_temp);
+        btnReadIRTemp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                atom.readIRTemperature(new IIRTemperatureListener() {
+
+                    @Override
+                    public void onIRTemperatureRead(final float temperature, final float ambient) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                onReadIRTempChange(temperature, ambient);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onIRTemperatureReadError(int error) {
+
+                    }
+                });
+            }
+        });
+
+        tvIRTempReadTemp = (TextView) findViewById(R.id.tv_ir_temp_read_temp);
+        tvIRTempReadAmbient = (TextView) findViewById(R.id.tv_ir_temp_read_ambient);
+
+        btnIRNotifications = (Button) findViewById(R.id.btn_ir_temp_notifications);
+        btnIRNotifications.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isListeningIRNotifications) {
+                    stopListeningIRNotifications();
+                } else {
+                    startIRNotifications();
+                }
+            }
+        });
+
+        tvIRNotificationsTemp = (TextView) findViewById(R.id.tv_ir_notif_temp);
+        tvIRNotificationsAmbient = (TextView) findViewById(R.id.tv_ir_notif_ambient);
+
+        btnIRStopNotifications = (Button) findViewById(R.id.btn_ir_stop_notifications);
+        btnIRStopNotifications.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                stopIRNotifications();
+            }
+        });
+    }
+
     private void connect() {
         atom.connect(new IConnectionStateListener() {
             @Override
@@ -213,12 +295,42 @@ public class DeviceTestsActivity extends AppCompatActivity {
 
     private void updateIsConnected() {
         tvIsConnected.setText(String.valueOf(isConnected));
+        btnReadIRTemp.setEnabled(isConnected);
+        btnIRNotifications.setEnabled(isConnected);
         btnReadHumidTemp.setEnabled(isConnected);
         btnHumidNotifications.setEnabled(isConnected);
     }
 
     private void disconnect() {
         atom.disconnect();
+    }
+
+    private void onReadIRTempChange(float temperature, float ambient) {
+        tvIRTempReadTemp.setText(String.format(Locale.getDefault(), "%.2fc", temperature));
+        tvIRTempReadAmbient.setText(String.format(Locale.getDefault(), "%.2f%%", ambient));
+    }
+
+    private void startIRNotifications() {
+        isListeningIRNotifications = true;
+        atom.startIRTemperatureNotifications(irTemperatureListener);
+        btnIRNotifications.setText(R.string.btn_device_notification_stop_listening);
+        btnIRStopNotifications.setVisibility(View.VISIBLE);
+    }
+
+    private void stopListeningIRNotifications() {
+        isListeningIRNotifications = false;
+        atom.stopListeningIRTemperature(irTemperatureListener);
+        btnIRNotifications.setText(R.string.btn_device_notification_start);
+    }
+
+    private void onIRNotificationsValuesChanged(float temperature, float ambient) {
+        tvIRNotificationsTemp.setText(String.format(Locale.getDefault(), "%.2fc", temperature));
+        tvIRNotificationsAmbient.setText(String.format(Locale.getDefault(), "%.2f%%", ambient));
+    }
+
+    private void stopIRNotifications() {
+        atom.stopIRTemperatureNotifications();
+        btnIRStopNotifications.setVisibility(View.INVISIBLE);
     }
 
     private void onReadHumidityChange(double temperature, double humidity) {

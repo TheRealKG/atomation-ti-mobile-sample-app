@@ -23,6 +23,14 @@
     <string name="edt_hint_event_data">Enter event data…</string>
     <string name="btn_events_send_event">Send Event</string>
 
+    <!-- IR Temperature -->
+    <string name="tv_device_ir_temperature_title">IR Temperature</string>
+    <string name="btn_device_ir_temp_read">Read IR Temperature</string>
+    <string name="tv_device_ir_temp_read">IR Temperature</string>
+    <string name="tv_device_temperature_ambient_read">Ambient</string>
+    <string name="tv_device_ir_temp_notif">IR Temperature</string>
+    <string name="tv_device_ir_ambient_notif">Ambient</string>
+
     <!-- humidity -->
     <string name="tv_device_humidity_title">Humidity and Temperature</string>
     <string name="btn_device_humid_read">Read Humidity and Temperature</string>
@@ -35,4 +43,5 @@
     <string name="btn_device_stop_notifications">Stop Notifications</string>
     <string name="btn_device_notification_start">Start Notifications</string>
     <string name="btn_device_notification_stop_listening">Stop Listening</string>
+
 </resources>
