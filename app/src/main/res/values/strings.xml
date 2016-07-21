@@ -10,7 +10,16 @@
     <string name="tv_scan_is_scanning">Is Scanning</string>
 
     <!-- Tests Activity -->
+
+    <!-- connect -->
     <string name="tv_device_is_connected">Is Connected</string>
     <string name="btn_connect_text">Connect</string>
     <string name="btn_disconnect_text">Disconnect</string>
+    <string name="tv_device_send_event_title">Events</string>
+
+    <!-- events -->
+    <string name="edt_hint_event_name">Enter event name…</string>
+    <string name="edt_hint_event_type">Enter event type…</string>
+    <string name="edt_hint_event_data">Enter event data…</string>
+    <string name="btn_events_send_event">Send Event</string>
 </resources>

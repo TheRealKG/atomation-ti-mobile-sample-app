@@ -3,8 +3,10 @@ package net.atomation.tidemo;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import net.atomation.atomationsdk.api.IConnectionStateListener;
@@ -13,7 +15,10 @@ import net.atomation.atomationsdk.ble.SensorTagAtomManager;
 
 public class DeviceTestsActivity extends AppCompatActivity {
 
+    private static final String TAG = DeviceTestsActivity.class.getSimpleName();
+
     public static final String INTENT_EXTRA_DEVICE_ADDRESS = "intent_extra_device_address";
+
     private ISensorTag2Atom atom;
     private Button btnConnect;
     private boolean isConnected;
@@ -58,6 +63,23 @@ public class DeviceTestsActivity extends AppCompatActivity {
 
         tvIsConnected = (TextView) findViewById(R.id.tv_tests_is_connected);
         updateIsConnected();
+
+        final EditText edtEventName = (EditText) findViewById(R.id.edt_events_event_name);
+        final EditText edtEventType = (EditText) findViewById(R.id.edt_events_event_type);
+        final EditText edtEventData = (EditText) findViewById(R.id.edt_events_event_data);
+
+        Button btnSendEvent = (Button) findViewById(R.id.btn_send_event);
+        btnSendEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String eventName = edtEventName.getText().toString();
+                String eventType = edtEventType.getText().toString();
+                String eventData = edtEventData.getText().toString();
+                Log.d(TAG, String.format("send event: name - %s, type - %s, data - %s", eventName, eventType, eventData));
+                atom.sendEvent(eventName, eventType, eventData);
+            }
+        });
+
     }
 
     private void connect() {
