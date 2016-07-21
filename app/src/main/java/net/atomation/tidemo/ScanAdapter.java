@@ -67,6 +67,13 @@ public class ScanAdapter extends RecyclerView.Adapter<ScanAdapter.ViewHolder> {
         return exists;
     }
 
+    private void startTestActivity(Context context, String address) {
+        Log.d(TAG, "starting to test: " + address);
+        Intent intent = new Intent(context, DeviceTestsActivity.class);
+        intent.putExtra(DeviceTestsActivity.INTENT_EXTRA_DEVICE_ADDRESS, address);
+        context.startActivity(intent);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView tvDeviceName;
@@ -85,11 +92,6 @@ public class ScanAdapter extends RecyclerView.Adapter<ScanAdapter.ViewHolder> {
                 }
             });
         }
-    }
-
-    private void startTestActivity(Context context, String address) {
-        Log.d(TAG, "starting to test: " + address);
-        // placeholder!
     }
 
     private static class Device {

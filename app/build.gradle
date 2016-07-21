@@ -37,5 +37,5 @@ dependencies {
     compile 'com.android.support:design:24.1.0'
 
     // Atomation
-    compile 'net.atomation.ti:sdk:0.7.152'
+    compile 'net.atomation.ti:sdk:0.7.155'
 }

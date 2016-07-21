@@ -8,4 +8,9 @@
     <string name="tv_scan_device_name">Name</string>
     <string name="tv_scan_device_mac_address">Address</string>
     <string name="tv_scan_is_scanning">Is Scanning</string>
+
+    <!-- Tests Activity -->
+    <string name="tv_device_is_connected">Is Connected</string>
+    <string name="btn_connect_text">Connect</string>
+    <string name="btn_disconnect_text">Disconnect</string>
 </resources>
