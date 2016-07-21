@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">TI Demo</string>
+
+    <!-- Scan Activity -->
+    <string name="btn_scan_text">Start Scan</string>
+    <string name="btn_scan_stop_text">Stop Scanning</string>
+    <string name="btn_scan_start_text">Start Scan</string>
+    <string name="tv_scan_device_name">Name</string>
+    <string name="tv_scan_device_mac_address">Address</string>
+    <string name="tv_scan_is_scanning">Is Scanning</string>
 </resources>

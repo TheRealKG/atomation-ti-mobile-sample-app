@@ -8,4 +8,27 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="title">
+        <item name="android:textSize">40sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="field">
+        <item name="android:textSize">20sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="listItem">
+        <item name="android:textSize">20sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="subTitle">
+        <item name="android:textSize">30sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="button">
+        <item name="android:textSize">20sp</item>
+    </style>
 </resources>

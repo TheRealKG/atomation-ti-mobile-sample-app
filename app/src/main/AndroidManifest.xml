@@ -3,12 +3,18 @@
     package="net.atomation.tidemo">
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+
+        <!-- The Atomation SDK Token -->
+        <meta-data
+            android:name="net.atomation.Token"
+            android:value="e809e7b76d1347487a93fd4bf5ebad8bedcc0b06" />
+
+        <activity android:name=".ScanActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
