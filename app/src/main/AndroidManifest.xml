@@ -12,7 +12,7 @@
         <!-- The Atomation SDK Token -->
         <meta-data
             android:name="net.atomation.Token"
-            android:value="e809e7b76d1347487a93fd4bf5ebad8bedcc0b06" />
+            android:value=your_sample_app_token />
 
         <activity android:name=".ScanActivity">
             <intent-filter>
