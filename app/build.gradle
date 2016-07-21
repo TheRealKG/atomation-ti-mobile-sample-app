@@ -20,9 +20,7 @@ android {
 }
 
 repositories {
-    maven {
-        url "https://dl.bintray.com/eyalatomation/maven"
-    }
+    jcenter()
 }
 
 dependencies {
@@ -37,5 +35,5 @@ dependencies {
     compile 'com.android.support:design:24.1.0'
 
     // Atomation
-    compile 'net.atomation.ti:sdk:0.7.155'
+    compile 'net.atomation.ti:sdk:0.1.0'
 }
