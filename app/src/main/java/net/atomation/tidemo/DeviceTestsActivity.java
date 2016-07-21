@@ -10,8 +10,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import net.atomation.atomationsdk.api.IConnectionStateListener;
+import net.atomation.atomationsdk.api.IHumidityTemperatureListener;
 import net.atomation.atomationsdk.api.ISensorTag2Atom;
 import net.atomation.atomationsdk.ble.SensorTagAtomManager;
+
+import java.util.Locale;
 
 public class DeviceTestsActivity extends AppCompatActivity {
 
@@ -20,9 +23,37 @@ public class DeviceTestsActivity extends AppCompatActivity {
     public static final String INTENT_EXTRA_DEVICE_ADDRESS = "intent_extra_device_address";
 
     private ISensorTag2Atom atom;
+
     private Button btnConnect;
     private boolean isConnected;
     private TextView tvIsConnected;
+
+    private Button btnReadHumidTemp;
+    private TextView tvHumidReadTemp;
+    private TextView tvHumidReadHumid;
+    private Button btnHumidNotifications;
+    private TextView tvHumidNotificationsTemp;
+    private TextView tvHumidNotificationsHumid;
+    private Button btnHumidStopNotifications;
+
+    private boolean isListeningHumidityNotifications;
+
+    private IHumidityTemperatureListener humidityTemperatureListener = new IHumidityTemperatureListener() {
+        @Override
+        public void onChange(final double temperature, final double humidity) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    onHumidityNotificationsValuesChanged(temperature, humidity);
+                }
+            });
+        }
+
+        @Override
+        public void onError(int error) {
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +64,7 @@ public class DeviceTestsActivity extends AppCompatActivity {
         String deviceAddress = intent.getStringExtra(INTENT_EXTRA_DEVICE_ADDRESS);
 
         // first, get an instance of SensorTagAtomManager
-        SensorTagAtomManager atomManager = SensorTagAtomManager.getInstance(this);
+        final SensorTagAtomManager atomManager = SensorTagAtomManager.getInstance(this);
 
         // then, test if the atom has already been created beforehand
         // getSensorTagDevice will return null if the atom wasn't found
@@ -62,8 +93,15 @@ public class DeviceTestsActivity extends AppCompatActivity {
         });
 
         tvIsConnected = (TextView) findViewById(R.id.tv_tests_is_connected);
-        updateIsConnected();
 
+        setupEventSending();
+
+        setupHumidityTemperatureSensor();
+
+        updateIsConnected();
+    }
+
+    private void setupEventSending() {
         final EditText edtEventName = (EditText) findViewById(R.id.edt_events_event_name);
         final EditText edtEventType = (EditText) findViewById(R.id.edt_events_event_type);
         final EditText edtEventData = (EditText) findViewById(R.id.edt_events_event_data);
@@ -79,7 +117,57 @@ public class DeviceTestsActivity extends AppCompatActivity {
                 atom.sendEvent(eventName, eventType, eventData);
             }
         });
+    }
 
+    private void setupHumidityTemperatureSensor() {
+        btnReadHumidTemp = (Button) findViewById(R.id.btn_read_humidity);
+        btnReadHumidTemp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                atom.readHumidityTemperature(new IHumidityTemperatureListener() {
+                    @Override
+                    public void onChange(final double temperature, final double humidity) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                onReadHumidityChange(temperature, humidity);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(int error) {
+
+                    }
+                });
+            }
+        });
+
+        tvHumidReadTemp = (TextView) findViewById(R.id.tv_humidity_read_temp);
+        tvHumidReadHumid = (TextView) findViewById(R.id.tv_humidity_read_humid);
+
+        btnHumidNotifications = (Button) findViewById(R.id.btn_humid_notifications);
+        btnHumidNotifications.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isListeningHumidityNotifications) {
+                    stopListeningHumidityNotifications();
+                } else {
+                    startHumidityNotifications();
+                }
+            }
+        });
+
+        tvHumidNotificationsTemp = (TextView) findViewById(R.id.tv_humidity_notif_temp);
+        tvHumidNotificationsHumid = (TextView) findViewById(R.id.tv_humidity_notif_humid);
+
+        btnHumidStopNotifications = (Button) findViewById(R.id.btn_humid_stop_notifications);
+        btnHumidStopNotifications.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                stopHumidNotifications();
+            }
+        });
     }
 
     private void connect() {
@@ -125,9 +213,39 @@ public class DeviceTestsActivity extends AppCompatActivity {
 
     private void updateIsConnected() {
         tvIsConnected.setText(String.valueOf(isConnected));
+        btnReadHumidTemp.setEnabled(isConnected);
+        btnHumidNotifications.setEnabled(isConnected);
     }
 
     private void disconnect() {
         atom.disconnect();
+    }
+
+    private void onReadHumidityChange(double temperature, double humidity) {
+        tvHumidReadTemp.setText(String.format(Locale.getDefault(), "%.2fc", temperature));
+        tvHumidReadHumid.setText(String.format(Locale.getDefault(), "%.2f%%", humidity));
+    }
+
+    private void startHumidityNotifications() {
+        isListeningHumidityNotifications = true;
+        atom.startHumidityTemperatureNotifications(humidityTemperatureListener);
+        btnHumidNotifications.setText(R.string.btn_device_notification_stop_listening);
+        btnHumidStopNotifications.setVisibility(View.VISIBLE);
+    }
+
+    private void stopListeningHumidityNotifications() {
+        isListeningHumidityNotifications = false;
+        atom.stopListeningHumidityTemperature(humidityTemperatureListener);
+        btnHumidNotifications.setText(R.string.btn_device_notification_start);
+    }
+
+    private void onHumidityNotificationsValuesChanged(double temperature, double humidity) {
+        tvHumidNotificationsTemp.setText(String.format(Locale.getDefault(), "%.2fc", temperature));
+        tvHumidNotificationsHumid.setText(String.format(Locale.getDefault(), "%.2f%%", humidity));
+    }
+
+    private void stopHumidNotifications() {
+        atom.stopHumidityTemperatureNotifications();
+        btnHumidStopNotifications.setVisibility(View.INVISIBLE);
     }
 }

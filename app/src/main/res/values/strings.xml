@@ -22,4 +22,17 @@
     <string name="edt_hint_event_type">Enter event type…</string>
     <string name="edt_hint_event_data">Enter event data…</string>
     <string name="btn_events_send_event">Send Event</string>
+
+    <!-- humidity -->
+    <string name="tv_device_humidity_title">Humidity and Temperature</string>
+    <string name="btn_device_humid_read">Read Humidity and Temperature</string>
+    <string name="tv_device_humid_temp_read">Temperature</string>
+    <string name="tv_device_humidity_read">Humidity</string>
+    <string name="tv_device_humid_temp_notif">Temperature</string>
+    <string name="tv_device_humidity_notif">Humidity</string>
+
+    <!-- notifications -->
+    <string name="btn_device_stop_notifications">Stop Notifications</string>
+    <string name="btn_device_notification_start">Start Notifications</string>
+    <string name="btn_device_notification_stop_listening">Stop Listening</string>
 </resources>
