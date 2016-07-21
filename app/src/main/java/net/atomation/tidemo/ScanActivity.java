@@ -49,6 +49,12 @@ public class ScanActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        btnScan.setText(scanHelper.isScanning() ? R.string.btn_scan_stop_text : R.string.btn_scan_start_text);
+    }
+
     private void StartScan() {
         scanAdapter.clear();
         IScanListener listener = new IScanListener() {

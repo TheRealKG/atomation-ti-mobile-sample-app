@@ -13,6 +13,7 @@ import net.atomation.atomationsdk.api.IConnectionStateListener;
 import net.atomation.atomationsdk.api.IHumidityTemperatureListener;
 import net.atomation.atomationsdk.api.IIRTemperatureListener;
 import net.atomation.atomationsdk.api.ISensorTag2Atom;
+import net.atomation.atomationsdk.ble.ScanHelper;
 import net.atomation.atomationsdk.ble.SensorTagAtomManager;
 
 import java.util.Locale;
@@ -87,6 +88,9 @@ public class DeviceTestsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_tests);
+
+        ScanHelper scanHelper = new ScanHelper(this);
+        scanHelper.stopScanning();
 
         Intent intent = getIntent();
         String deviceAddress = intent.getStringExtra(INTENT_EXTRA_DEVICE_ADDRESS);
