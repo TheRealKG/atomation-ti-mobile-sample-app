@@ -14,14 +14,21 @@
             android:name="net.atomation.Token"
             android:value=your_sample_app_token />
 
-        <activity android:name=".ScanActivity">
+        <activity
+            android:name=".ScanActivity"
+            android:screenOrientation="portrait"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DeviceTestsActivity" />
+
+        <activity
+            android:name=".DeviceTestsActivity"
+            android:screenOrientation="portrait"
+            />
     </application>
 
 </manifest>
