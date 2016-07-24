@@ -98,7 +98,7 @@ public class DeviceTestsActivity extends AppCompatActivity {
         // first, get an instance of SensorTagAtomManager
         final SensorTagAtomManager atomManager = SensorTagAtomManager.getInstance(this);
 
-        // then, test if the atom has already been created beforehand
+        // then, test if the atom has already been created elsewhere
         // getSensorTagDevice will return null if the atom wasn't found
         atom = atomManager.getSensorTag2Device(deviceAddress);
 
