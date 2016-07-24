@@ -317,14 +317,14 @@ public class DeviceTestsActivity extends AppCompatActivity {
     private void startIRNotifications() {
         isListeningIRNotifications = true;
         atom.startIRTemperatureNotifications(irTemperatureListener);
-        btnIRNotifications.setText(R.string.btn_device_notification_stop_listening);
+        updateNotificationButton(btnIRNotifications, isListeningIRNotifications);
         btnIRStopNotifications.setVisibility(View.VISIBLE);
     }
 
     private void stopListeningIRNotifications() {
         isListeningIRNotifications = false;
         atom.stopListeningIRTemperature(irTemperatureListener);
-        btnIRNotifications.setText(R.string.btn_device_notification_start);
+        updateNotificationButton(btnIRNotifications, isListeningIRNotifications);
     }
 
     private void onIRNotificationsValuesChanged(float temperature, float ambient) {
@@ -334,7 +334,9 @@ public class DeviceTestsActivity extends AppCompatActivity {
 
     private void stopIRNotifications() {
         atom.stopIRTemperatureNotifications();
+        isListeningIRNotifications = false;
         btnIRStopNotifications.setVisibility(View.INVISIBLE);
+        updateNotificationButton(btnIRNotifications, isListeningIRNotifications);
     }
 
     private void onReadHumidityChange(double temperature, double humidity) {
@@ -345,14 +347,14 @@ public class DeviceTestsActivity extends AppCompatActivity {
     private void startHumidityNotifications() {
         isListeningHumidityNotifications = true;
         atom.startHumidityTemperatureNotifications(humidityTemperatureListener);
-        btnHumidNotifications.setText(R.string.btn_device_notification_stop_listening);
+        updateNotificationButton(btnHumidNotifications, isListeningHumidityNotifications);
         btnHumidStopNotifications.setVisibility(View.VISIBLE);
     }
 
     private void stopListeningHumidityNotifications() {
         isListeningHumidityNotifications = false;
         atom.stopListeningHumidityTemperature(humidityTemperatureListener);
-        btnHumidNotifications.setText(R.string.btn_device_notification_start);
+        updateNotificationButton(btnHumidNotifications, isListeningHumidityNotifications);
     }
 
     private void onHumidityNotificationsValuesChanged(double temperature, double humidity) {
@@ -362,6 +364,12 @@ public class DeviceTestsActivity extends AppCompatActivity {
 
     private void stopHumidNotifications() {
         atom.stopHumidityTemperatureNotifications();
+        isListeningHumidityNotifications = false;
         btnHumidStopNotifications.setVisibility(View.INVISIBLE);
+        updateNotificationButton(btnHumidNotifications, isListeningHumidityNotifications);
+    }
+
+    private void updateNotificationButton(Button button, boolean isListening) {
+        button.setText(isListening ? R.string.btn_device_notification_stop_listening : R.string.btn_device_notification_start);
     }
 }
