@@ -6,7 +6,7 @@
         android:allowBackup="false"
         android:icon="@drawable/logo_atomation_ti"
         android:label="@string/app_name"
-        android:supportsRtl="true"
+        android:supportsRtl="false"
         android:theme="@style/AppTheme">
 
         <!-- The Atomation SDK Token -->
